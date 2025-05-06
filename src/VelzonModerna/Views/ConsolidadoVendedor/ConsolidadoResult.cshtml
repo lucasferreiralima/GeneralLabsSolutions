@@ -1,0 +1,121 @@
+﻿@using GeneralLabSolutions.Domain.Enums
+@using GeneralLabSolutions.Domain.DTOs.DtosConsolidados
+@model VendedorConsolidadoDto
+
+@{
+    ViewBag.Title = "Consolidado de Vendedor";
+    ViewBag.pTitle = "Consolidado de Vendedor / Vendas";
+    ViewBag.pageTitle = "Consolidado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title mb-0">
+                    Consolidado do Vendedor: <strong><span class="badge bg-primary"> @Model.Nome</span></strong>
+                </h1>
+            </div>
+            <div class="card-body">
+                <div class="alert" style="background-color: #313131;">
+                    <h4><strong>Total de Vendas:</strong> <span class="badge bg-primary">@Model.TotalDeVendas</span></h4>
+                    <h4><strong>Valor Total de Vendas:</strong> <span class="badge bg-primary">@Model.ValorTotalDeVendas.ToString("C")</span></h4>
+
+                    <h4><strong>Última Venda:</strong> <span class="badge bg-primary">@Model.UltimaVenda?.ToString("dd/MM/yyyy") </span><br /></h4>
+                    <h4><strong>Ticket Médio por Venda:</strong> <span class="badge bg-primary">@Model.TicketMedioPorVenda.ToString("C2") </span><br /></h4>
+                    <h4><strong>Intervalo Médio entre Vendas (dias):</strong> <span class="badge bg-primary">@Model.IntervaloMedioEntreVendas</span></h4>
+                </div>
+
+                <hr />
+
+                <h2>Histórico de Vendas</h2>
+                <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Data da Venda</th> <!-- Todo: Mostrar Total de Venda por Qtde e Valor -->
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                            <th>Ações</th> <!-- Coluna de ações -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var venda in Model.HistoricoDeVendas)
+                        {
+                            string statusClass = venda.Status.Equals("Pago") 
+                                ? "success" : venda.Status.Equals("EmProcessamento") 
+                                ? "warning" : "danger";
+
+                            <tr>
+                                <td>@venda.DataVenda.ToShortDateString()</td>
+                                <td>
+                                    <span class="badge bg-primary">
+                                        @venda.ValorTotal.ToString("C2")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-@statusClass">
+                                        @venda.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-success"
+                                            data-bs-toggle="offcanvas"
+                                            data-bs-target="#offcanvasVenda"
+                                            onclick="carregarItensVenda('@venda.Id')">
+                                        Ver Itens
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end" style="width: 50%;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="offcanvasVenda" aria-labelledby="offcanvasVendaLabel">
+    <div class="offcanvas-header">
+        <h3 class="offcanvas-title" id="offcanvasVendaLabel"><strong><span class="badge bg-primary"> Itens da Venda </span></strong></h3>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="itensVendaConteudo">
+            <!-- Conteúdo será carregado via AJAX -->
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <partial name="partialcooperchip/_scripts_datatables" />
+
+    <script>
+        $('#example').DataTable({
+            "lengthMenu": [5, 8, 10, 25, 50],
+            "pageLength": 5
+        });
+
+        function carregarItensVenda(vendaId) {
+            $.ajax({
+                url: '/ConsolidadoVendedor/ObterItensVenda',
+                type: 'GET',
+                data: { vendaId: vendaId },
+                success: function (data) {
+                    $('#itensVendaConteudo').html(data);
+                },
+                error: function () {
+                    alert('Erro ao carregar os itens da venda.');
+                }
+            });
+        }
+    </script>
+
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+
+}
+
+

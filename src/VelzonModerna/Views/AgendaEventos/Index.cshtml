@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "Agendamento";
+    ViewBag.pTitle = "Agendamento de Compromissos";
+    ViewBag.pageTitle = "Calendário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    
+    <link rel="stylesheet" href="~/css/miscellaneous/fullcalendar/fullcalendar.bundle.css" />
+
+    <link href="~/cooperchipfullcalendar/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/cooperchipfullcalendar/fullcalendar-modal-details.css" rel="stylesheet" />
+
+}
+
+@* Proteger contra CSRF *@
+@Html.AntiForgeryToken()
+
+<div class="alert alert-primary">
+    <div class="d-flex flex-start w-100">
+        <div class="mr-2 hidden-md-down">
+            <span class="icon-stack icon-stack-lg">
+                <i class="base base-6 icon-stack-3x opacity-100 color-primary-500"></i>
+                <i class="base base-10 icon-stack-2x opacity-100 color-primary-300 fa-flip-vertical"></i>
+                <i class="ni ni-blog-read icon-stack-1x opacity-100 color-white"></i>
+            </span>
+        </div>
+
+
+        <div class="d-flex flex-fill">
+            <div class="flex-fill">
+                <span class="h3">Sobre o Gal Lab Solutions</span>
+
+                <p>
+                    O Gal Lab Solutions revoluciona a gestão de clínicas e consultórios, integrando agendamento, prontuários eletrônicos e comunicação com pacientes em uma plataforma intuitiva. Destinado a simplificar operações diárias.
+                </p>
+                <a asp-action="AgendaFilter" asp-controller="AgendaEventos" class="btn btn-info" type="button">Tabela de Filtros</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <div id="calendar"></div>
+                    <!-- Contêiner para o modal dinâmico -->
+                    <div id="modalContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    
+    <script src="~/cooperchipfullcalendar/sweetalert2@11.js"></script>
+
+    <script src="~/js/dependency/moment/moment.js"></script>
+    <script src="~/js/miscellaneous/fullcalendar/fullcalendar.bundle.js"></script>
+
+    <script src="~/lib/fullcalendar/core/locales/pt-br.js"></script>
+
+    <script>
+
+        var todayDate = moment().startOf('day');
+        var YM = todayDate.format('YYYY-MM');
+        var YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
+        var TODAY = todayDate.format('YYYY-MM-DD');
+        var TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid', 'list', 'timeGrid', 'interaction', 'bootstrap'],
+                themeSystem: 'bootstrap',
+                locale: 'pt-br',
+                timeZone: 'local',
+                eventTimeFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    meridiem: 'short'
+                },
+                navLinks: true,
+                header: {
+                    left: 'prev,next today addEventButton',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                footer: {
+                    left: '',
+                    center: '',
+                    right: ''
+                },
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                views: {
+                    sevenDays: {
+                        type: 'agenda',
+                        buttonText: '7 Days',
+                        visibleRange: function (currentDate) {
+                            return {
+                                start: currentDate.clone().subtract(2, 'days'),
+                                end: currentDate.clone().add(5, 'days'),
+                            };
+                        },
+                        duration: { days: 7 },
+                        dateIncrement: { days: 1 },
+                    },
+                },
+
+                eventClick: function (info) {
+                    var eventId = info.event.id;
+                    var eventStart = info.event.start;
+                    var currentDate = new Date();
+
+                    // Ajusta as datas para remover a hora, comparando apenas a data
+                    var eventStartDate = new Date(eventStart.getFullYear(), eventStart.getMonth(), eventStart.getDate());
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    if (eventStartDate < currentDate) {
+                        // A data do evento é passada, prossegue com a chamada AJAX para carregar os detalhes
+                        $.ajax({
+                            url: '/AgendaEventos/EventDetails',
+                            type: 'GET',
+                            data: { id: eventId },
+                            success: function (data) {
+                                $('#modalContainer').html(data);
+                                $('#envetModalLgDetails').modal('show');
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: 'Atenção!',
+                                    text: 'Erro ao carregar detalhes do evento.',
+                                    icon: 'warning',
+                                    confirmButtonText: 'Fechar'
+                                });
+                            }
+                        });
+                    } else {
+                        // Evento é atual ou futuro, opcionalmente mostre uma mensagem ou ação
+
+                        $.ajax({
+                            url: '/AgendaEventos/GetEventForEdit/' + eventId,
+                            type: 'GET',
+                            success: function (response) {
+                                $('#modalContainer').html(response);
+                                $('#envetModalLg').modal('show');
+                            },
+                            error: function (error) {
+                                Swal.fire('Erro', 'Não foi possível carregar o evento para edição.', 'error');
+                            }
+                        });
+
+
+                    }
+                },
+
+
+
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    fetch('/AgendaEventos/GetEvents', {
+                        method: 'GET',
+                    })
+                        .then(response => response.json())
+                        .then(events => events.map(event => ({
+                            id: event.id,
+                            title: event.title,
+                            start: event.start,
+                            end: event.end,
+
+                            // Assegura que 'color' está em minúsculas
+                            color: event.color ? event.color.toLowerCase() : '#3cb371', // fallback
+
+                            allDay: event.allDay,
+                            extendedProps: { // Armazena dados adicionais em extendedProps
+                                nomeParticipante: event.nomeParticipante,
+                                description: event.description
+                            }
+                        })))
+                        .then(data => {
+                            console.log("Eventos processados:", data); // Verifica a saída dos dados
+                            successCallback(data);
+                        })
+                        .catch(error => {
+                            console.error("Erro ao buscar eventos:", error);
+                            failureCallback(error);
+                        });
+                },
+
+                dateClick: function (info) {
+                    var clickedDate = info.date;
+                    var currentDate = new Date();
+
+                    // Remove a hora da comparação, comparando apenas a data
+                    clickedDate.setHours(0, 0, 0, 0);
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    if (clickedDate < currentDate) {
+                        // Se a data clicada for anterior à data atual, exibe um alerta
+                        Swal.fire({
+                            title: 'Data Inválida!',
+                            text: 'NÃO É POSSÍVEL AGENDAR EM DATAS NO PASSADO.',
+                            icon: 'warning', // 'success', 'error', 'warning', 'info', 'question'
+                            confirmButtonText: 'Entendi'
+                        });
+
+                    } else {
+                        // esta linha deve estar aqui, depois das configurações para comparar datas passadas
+                        var clickedDate = moment(info.dateStr).format('YYYY-MM-DDTHH:mm');
+
+                        $.ajax({
+                            url: '/AgendaEventos/CreateModal',
+                            type: 'GET',
+                            success: function (data) {
+                                $('#modalContainer').html(data);
+                                $('#envetModalLg').modal('show');
+                                $('#modalContainer #Start').val(clickedDate);
+                            },
+                            error: function () {
+                                alert('Erro ao carregar o formulário de agendamento.');
+                            }
+                        });
+                    }
+                },
+
+                eventColor: '#378006',
+                // Aqui você pode continuar com mais configurações do FullCalendar
+
+
+
+                eventDrop: function(info)
+                {
+                    // Callback disparado quando o usuário termina de arrastar um evento
+                    let eventObj = info.event;
+
+                    // Exemplo de validação: se não quiser permitir arrastar para datas passadas
+                    // ou qualquer outra regra, faça a checagem aqui.
+                    var newStart = eventObj.start; // date object
+                    var newEnd = eventObj.end;     // pode ser null se o evento não tiver 'end'
+
+                    var currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+                    var newStartDate = new Date(newStart.getFullYear(), newStart.getMonth(), newStart.getDate());
+
+                    // Exemplo: se a data de início arrastada for < data atual, reverte a ação
+                    if (newStartDate < currentDate) {
+                        Swal.fire({
+                            title: 'Data inválida!',
+                            text: 'Não é permitido mover para datas passadas.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
+                        info.revert();
+                        return; // aborta
+                    }
+
+                    // Se passou na validação, chama o servidor para persistir a mudança
+                    $.ajax({
+                        url: '/AgendaEventos/UpdateEventDates',
+                        method: 'POST',
+                        data: {
+                            id: eventObj.id,
+                            start: moment(eventObj.start).format('YYYY-MM-DDTHH:mm:ss'),
+                            end: eventObj.end
+                                ? moment(eventObj.end).format('YYYY-MM-DDTHH:mm:ss')
+                                : null
+                        },
+                        headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+                        success: function(response) {
+                            // Se o back-end confirmou o sucesso, ótimo!
+                            Swal.fire({
+                                title: 'Evento atualizado!',
+                                text: 'As novas datas foram salvas com sucesso.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                        },
+                        error: function(err) {
+                            // Em caso de erro no back-end, reverta a mudança visual
+                            info.revert();
+                            Swal.fire({
+                                title: 'Erro!',
+                                text: 'Não foi possível salvar a nova data do evento.',
+                                icon: 'error',
+                                confirmButtonText: 'Entendi'
+                            });
+                        }
+                    });
+                },
+
+                eventResize: function(info) {
+                    // Se quiser persistir redimensionamento (mudança de duração),
+                    // a lógica é parecida, recebendo info.event.start e info.event.end atualizados.
+                    // Pode reaproveitar a mesma rota /AgendaEventos/UpdateEventDates, por exemplo.
+                },
+
+
+
+            });
+
+
+            calendar.render();
+        });
+
+
+        // Quando o documento estiver pronto
+        $(document).ready(function () {
+            // Evento de submissão do formulário
+            $(document).on('submit', '#eventForm', function (e) {
+                e.preventDefault(); // Impede o envio padrão do formulário
+
+                // var startDateTime = moment($('#Start').val()).format('YYYY-MM-DDTHH:mm:ss');
+                // $('#Start').val(startDateTime);
+
+
+                // Serializa os dados do formulário para envio
+                var formData = $(this).serialize();
+
+                // Faz a requisição AJAX para a action Create
+                $.ajax({
+                    url: '/AgendaEventos/Save',
+                    type: 'POST',
+                    data: formData,
+                    headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+
+                    success: function (response) {
+
+                        Swal.fire({
+                            title: 'SUCESSO!',
+                            text: 'Seu Agendamento foi gravado com sucesso!',
+                            icon: 'success', // 'success', 'error', 'warning', 'info', 'question'
+                            confirmButtonText: 'Ok'
+                        });
+
+                        // Fecha o modal
+                        $('#envetModalLg').modal('hide');
+
+                        // Recarrega a página ou o calendário para mostrar o novo evento
+                        location.reload(); // ou calendar.refetchEvents();
+                    },
+                    error: function (xhr, status, error) {
+                        // Tratamento de erro
+                        Swal.fire({
+                            title: 'ATENÇÃO!',
+                            text: 'Erro ao salvar o evento: ' + error,
+                            icon: 'error', // 'success', 'error', 'warning', 'info', 'question'
+                            confirmButtonText: 'Entendi'
+                        });
+
+                    }
+                })
+
+            });
+
+        });
+
+
+    </script>
+
+}

@@ -1,0 +1,40 @@
+﻿@model List<GeneralLabSolutions.Identidade.Dtos.RoleDto>
+
+<h2>Gerenciamento de Roles</h2>
+
+<a asp-action="Create" class="btn btn-primary">Criar Nova Role</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome da Role</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@role.Name</td> 
+                    <td>
+                        <a asp-action="ManageUsers" asp-route-roleName="@role.Name" class="btn btn-info">Gerenciar Usuários</a>
+
+                        <form asp-action="Delete" asp-route-roleName="@role.Name" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta role?');">
+                                Excluir
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="2" class="text-center">Nenhuma role cadastrada.</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,32 @@
+﻿@model GeneralLabSolutions.Identidade.Dtos.AtualizarUsuarioDto
+
+<h2>Editar Usuário</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="form-group">
+        <label>Nome Completo</label>
+        <input asp-for="NomeCompleto" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" type="email" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Data de Nascimento</label>
+        <input asp-for="DataNascimento" type="date" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Usuário Ativo</label>
+        <select asp-for="IsAtivo" class="form-control">
+            <option value="true">Ativo</option>
+            <option value="false">Inativo</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

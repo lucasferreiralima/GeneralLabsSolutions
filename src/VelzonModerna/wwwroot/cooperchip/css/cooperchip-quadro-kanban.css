@@ -1,0 +1,289 @@
+﻿ 
+        /*:root {
+            --priority-high: #dc3545;
+            --priority-medium: #ffc107;
+            --priority-low: #0dcaf0;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .kanban-column {
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .tasks {
+            flex-grow: 1;
+            overflow-y: auto;
+            //min-height: 40vh;*/ /* Era 60vh */
+            /*scrollbar-width: thin;
+            scrollbar-color: #4d4d4d transparent;
+        }
+
+        .task-card {
+            background-color: #3d3d3d;
+            border: 1px solid #4d4d4d;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: move;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+            .task-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .task-card::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 5px;
+                height: 100%;
+                border-radius: 6px 0 0 6px;
+            }
+
+        .priority-high::after {
+            background-color: var(--priority-high);
+        }
+
+        .priority-medium::after {
+            background-color: var(--priority-medium);
+        }
+
+        .priority-low::after {
+            background-color: var(--priority-low);
+        }
+
+        .task-card p {
+            color: #cccccc;
+            margin: 8px 0;
+        }
+
+        .participant-badge {
+            margin: 2px;
+            font-size: 0.8em;
+            backdrop-filter: brightness(0.8);
+        }
+
+        .modal-content {
+            background-color: #2d2d2d;
+            color: white;
+            border: 1px solid #404040;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #404040;
+            background-color: #1a1a1a;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #404040;
+            background-color: #1a1a1a;
+        }
+
+        .form-control.bg-dark {
+            background-color: #1a1a1a !important;
+            color: #ffffff !important;
+            border: 1px solid #404040;
+        }
+
+        .form-control:focus {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-color: #0d6efd;
+            box-shadow: none;
+        }
+
+        .due-date {
+            color: #aaaaaa;
+            font-size: 0.8em;
+        }*/
+
+        /* Empty State */
+        /*.empty-state {
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+            .empty-state i {
+                font-size: 2rem;
+                display: block;
+                margin-bottom: 0.5rem;
+            }*/
+
+        /* Botoes Undo/Redo desabilitados */
+        /*.btn-undo-redo[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }*/
+
+
+
+/* Ajuste para manter os botões fixos na parte inferior da coluna */
+:root {
+    --priority-high: #dc3545;
+    --priority-medium: #ffc107;
+    --priority-low: #0dcaf0;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    min-height: 100vh;
+}
+
+.kanban-column {
+    background-color: #2d2d2d;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s;
+    position: relative; /* Mantém a referência para o botão fixo */
+}
+
+.tasks {
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #4d4d4d transparent;
+    padding-bottom: 60px; /* Espaço extra para o botão */
+}
+
+.kanban-column button {
+    position: sticky;
+    bottom: 10px;
+    width: 100%;
+    background-color: #343a40;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+    .kanban-column button:hover {
+        background-color: #495057;
+    }
+
+.task-card {
+    background-color: #3d3d3d;
+    border: 1px solid #4d4d4d;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: move;
+    transition: all 0.2s;
+    position: relative;
+}
+
+    .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .task-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        border-radius: 6px 0 0 6px;
+    }
+
+.priority-high::after {
+    background-color: var(--priority-high);
+}
+
+.priority-medium::after {
+    background-color: var(--priority-medium);
+}
+
+.priority-low::after {
+    background-color: var(--priority-low);
+}
+
+.task-card p {
+    color: #cccccc;
+    margin: 8px 0;
+}
+
+.task-card button {
+    background-color: transparent;
+    border: 1px solid #ffc107;
+    color: #ffc107;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: all 0.2s;
+}
+
+    .task-card button:hover {
+        background-color: #ffc107;
+        color: #1a1a1a;
+    }
+
+.participant-badge {
+    margin: 2px;
+    font-size: 0.8em;
+    backdrop-filter: brightness(0.8);
+}
+
+.modal-content {
+    background-color: #2d2d2d;
+    color: white;
+    border: 1px solid #404040;
+}
+
+.modal-header {
+    border-bottom: 1px solid #404040;
+    background-color: #1a1a1a;
+}
+
+.modal-footer {
+    border-top: 1px solid #404040;
+    background-color: #1a1a1a;
+}
+
+.form-control.bg-dark {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 1px solid #404040;
+}
+
+.form-control:focus {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+
+.due-date {
+    color: #aaaaaa;
+    font-size: 0.8em;
+}
+
+/* Garante que o último card role normalmente abaixo do botão adicionar */
+.tasks .task-card:last-child {
+    margin-bottom: 15px; /* Adiciona um espaço seguro entre o último card e o botão de adicionar */
+}
+

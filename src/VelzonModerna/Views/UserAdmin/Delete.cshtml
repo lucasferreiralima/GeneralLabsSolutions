@@ -1,0 +1,9 @@
+﻿@model GeneralLabSolutions.Identidade.Dtos.UserDto
+
+<h2>Excluir Usuário</h2>
+<p>Tem certeza que deseja excluir <strong>@Model.NomeCompleto</strong>?</p>
+<form asp-action="Delete" asp-route-id="@Model.UserId" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,12 @@
+﻿@model GeneralLabSolutions.Identidade.Dtos.UserDto
+
+<h2>Detalhes do Usuário</h2>
+
+<p><strong>Nome Completo:</strong> @Model.NomeCompleto</p>
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>Email Confirmado:</strong> @Model.EmailConfirmado</p>
+<p><strong>Data de Nascimento:</strong> @Model.DataNascimento.ToShortDateString()</p>
+<p><strong>Usuário Ativo:</strong> @(Model.UsuarioBloqueado == "Sim" ? "Não" : "Sim")</p>
+
+<a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-primary">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Voltar</a>

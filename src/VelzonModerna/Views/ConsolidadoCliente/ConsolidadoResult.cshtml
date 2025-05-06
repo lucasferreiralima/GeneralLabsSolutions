@@ -1,0 +1,152 @@
+﻿@using GeneralLabSolutions.Domain.Enums
+@using GeneralLabSolutions.Domain.DTOs.DtosConsolidados
+@model ClienteConsolidadoDto
+
+@{
+    ViewBag.Title = "Consolidado";
+    ViewBag.pTitle = "Consolidado de Cliente / Pedidos";
+    ViewBag.pageTitle = "Consolidado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <partial name="partialcooperchip/_cssindex" />
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title mb-0">
+                    Consolidado do Cliente: <strong><span class="badge bg-primary">@Model.Nome</span></strong>
+                </h1>
+            </div>
+            <div class="card-body">
+
+                <div class="alert" style="background-color: #313131;">
+                    <div class="mb-3">
+                        @* <strong>ID do Cliente:</strong> @Model.ClienteId <br /> *@
+                        @* <strong>Nome:</strong> @Model.Nome <br /> *@
+                        <h4><strong>Quantidade de Pedidos:</strong> <span class="badge bg-primary">@Model.QuantidadeDePedidos</span> <br /></h4>
+                        <h4><strong>Valor Total de Compras:</strong> <span class="badge bg-primary">@Model.ValorTotalDeCompras.ToString("C")</span></h4>
+
+
+                        <h4><strong>Última Compra:</strong> <span class="badge bg-primary">@Model.UltimaCompraDesteCliente?.ToString("dd/MM/yyyy") </span><br /></h4>
+                        <h4><strong>Ticket Médio por Pedido:</strong> <span class="badge bg-primary">@Model.TicketMedioPorPedido.ToString("C2") </span><br /></h4>
+                        <h4><strong>Intervalo Médio entre Pedidos (dias):</strong> <span class="badge bg-primary">@Model.IntervaloMedioEntrePedidos</span></h4>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h2>Histórico de Pedidos</h2>
+                <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Data do Pedido</th>
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                            <th>Ações</th> <!-- Nova coluna de ações -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var pedido in Model.HistoricoDePedidos)
+                        {
+
+                            string? statusClass = "info";
+
+                            if (pedido.Status.Equals("Orcamento"))
+                            {
+                                statusClass = "secondary";
+                            } else if (pedido.Status.Equals("EmProcessamento"))
+                            {
+                                statusClass = "warning";
+                            } else if (pedido.Status.Equals("Pago"))
+                            {
+                                statusClass = "success";
+                            } else if (pedido.Status.Equals("Enviado"))
+                            {
+                                statusClass = "primary";
+                            } else if (pedido.Status.Equals("Entregue"))
+                            {
+                                statusClass = "success";
+                            }
+
+                            <tr>
+                                <td>@pedido.DataPedido.ToShortDateString()</td>
+                                <td>@pedido.ValorTotal.ToString("C2", CultureInfo.CurrentCulture)</td>
+                                <td>
+                                    <span class="badge bg-@statusClass">
+                                        @pedido.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button class="btn btn-sm btn-outline-success"
+                                            data-bs-toggle="offcanvas"
+                                            data-bs-target="#offcanvasPedido"
+                                            onclick="carregarItensPedido('@pedido.Id')">
+                                        Ver Itens
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="offcanvas offcanvas-end" style="width: 50%;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="offcanvasPedido" aria-labelledby="offcanvasPedidoLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasPedidoLabel">Itens do Pedido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Aqui será carregado o conteúdo dos itens do pedido -->
+        <div id="itensPedidoConteudo">
+            <!-- Os itens serão carregados aqui via AJAX -->
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts {
+
+    <partial name="partialcooperchip/_scripts_datatables" />
+
+    <script>
+        $('#example').DataTable({
+            "lengthMenu": [5, 8, 10, 25, 50],
+            "pageLength": 5
+        });
+    </script>
+
+    <script>
+        function carregarItensPedido(pedidoId) {
+            $.ajax({
+                url: '/ConsolidadoCliente/ObterItensPedido',
+                type: 'GET',
+                data: { pedidoId: pedidoId },
+                success: function (data) {
+                    console.log(data);
+                    // Aqui você insere os itens do pedido no OffCanvas
+                    $('#itensPedidoConteudo').html(data);
+                },
+                error: function () {
+                    alert('Erro ao carregar os itens do pedido.');
+                }
+            });
+        }
+    </script>
+
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+}

@@ -1,0 +1,56 @@
+﻿@model VelzonModerna.ViewModels.UsuarioRegistroViewModel
+
+@{
+    ViewData["Title"] = "Registrar-se";
+}
+
+<h2>Registrar-se</h2>
+
+<form asp-action="Register" asp-controller="Auth" method="post">
+    <div class="form-group">
+        <label asp-for="Apelido"></label>
+        <input asp-for="Apelido" class="form-control" required />
+        <span asp-validation-for="Apelido" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NomeCompleto"></label>
+        <input asp-for="NomeCompleto" class="form-control" required />
+        <span asp-validation-for="NomeCompleto" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DataNascimento"></label>
+        <input asp-for="DataNascimento" type="date" class="form-control" required />
+        <span asp-validation-for="DataNascimento" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ImgProfilePath">Imagem de Perfil</label>
+        <input asp-for="ImgProfilePath" class="form-control" />
+        <span asp-validation-for="ImgProfilePath" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" type="email" class="form-control" required />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Senha"></label>
+        <input asp-for="Senha" type="password" class="form-control" required />
+        <span asp-validation-for="Senha" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SenhaConfirmacao"></label>
+        <input asp-for="SenhaConfirmacao" type="password" class="form-control" required />
+        <span asp-validation-for="SenhaConfirmacao" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar</button>
+    <a asp-action="Login" class="btn btn-secondary">Já tenho uma conta</a>
+</form>
+
+

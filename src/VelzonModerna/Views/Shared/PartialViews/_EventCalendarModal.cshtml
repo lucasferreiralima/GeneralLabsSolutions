@@ -1,0 +1,98 @@
+﻿@using VelzonModerna.ViewModels
+@model CreateEditAgendaEventoViewModel
+
+@* @section HeadBlock {
+    <link rel="stylesheet" media="screen, print" href="~/css/theme-demo.css">
+} *@
+<div class="modal fade default-example-modal-right-lg" id="envetModalLg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-right modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title h3">Gal lab Solution - Agendamentos</h3>
+                <hr />
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                </button>
+            </div>
+
+    @*         <form asp-action="@((Model.Id == Guid.Empty) ? "Save" : "Edit")" method="post"> *@
+                <form asp-action="Save" method="post">
+                    <div class="modal-body">
+
+                    @* Adicione os campos de validação antiforgery *@
+                    @Html.AntiForgeryToken()
+
+                    @* Campo oculto para o ID *@
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row col-12">
+                        <div class="form-group col-6">
+                            <label asp-for="Start">Data e Hora Inicial</label>
+                            <input asp-for="Start" class="form-control" type="datetime-local" value="@Model.Start.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                            <span asp-validation-for="Start" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label asp-for="End">Data e Hora Final</label>
+                            <input asp-for="End" class="form-control" type="datetime-local" value="@(Model.End.HasValue ? Model.End.Value.ToString("yyyy-MM-ddTHH:mm:ss") : String.Empty)" />
+                            <span asp-validation-for="End" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Title">Título do Evento</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="ParticipanteId">Participante</label>
+                        <select asp-for="ParticipanteId" asp-items="Model.Participantes" class="form-control">
+                            <option value="">Escolha...</option>
+                        </select>
+                        <span asp-validation-for="ParticipanteId" class="text-danger"></span>
+                    </div>
+                  
+
+                    <div class="form-group">
+                        <label asp-for="Color">Prioridade</label>
+                        <select asp-for="Color" class="form-control">
+                            <option value="">Selecione a prioridade...</option>
+                            <option value="#B22222">Critica</option>
+                            <option value="#00BFFF">Alta</option>
+                            <option value="#3CB371">Média</option>
+                            <option value="#463E2F">Regular</option>
+                            <option value="#ed5353">Baixa</option>
+
+                            <!-- Outras cores -->
+                        </select>
+                        <span asp-validation-for="Color" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="Description">Comentário</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">@((Model.Id == Guid.Empty) ? "Criar" : "Salvar Alterações")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>       
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // Aqui você pode adicionar scripts específicos para o modal, se necessário.
+    </script>
+}

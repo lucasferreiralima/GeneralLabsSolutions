@@ -1,0 +1,51 @@
+﻿@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-warning alert-border-left alert-dismissible fade show"
+         role="alert"><i class="ri-alert-line me-3 align-middle fs-16"></i><strong>
+
+            <h3 id="msgRetorno" style="padding-top: 20px">Opa! Algo deu errado :(</h3>
+
+         </strong>       
+
+        <div style="padding-top: 20px" asp-validation-summary="All" class="text-danger"></div>
+         
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Sucesso))
+{
+    <div style="padding-top: 15px"></div>
+
+
+    <div id="msg_box" class="alert alert-success alert-border-left alert-dismissible fade show" role="alert">
+        <i class="ri-notification-off-line me-3 align-middle fs-16"></i><strong>Successo!</strong>
+        <h3 id="msgRetorno">@ViewBag.Sucesso</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData ["Sucesso"] != null)
+{
+    <div style="padding-top: 15px"></div>
+
+    <div id="msg_box" class="alert alert-success alert-border-left alert-dismissible fade show" role="alert">
+        <i class="ri-notification-off-line me-3 align-middle fs-16"></i><strong>Successo!</strong>
+        <h4 id="msgRetorno">@Html.Raw(TempData ["Sucesso"].ToString())</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+@if (TempData ["Excluido"] != null)
+{
+    <div style="padding-top: 15px"></div>
+
+    <div id="msg_box" class="alert alert-danger alert-border-left alert-dismissible fade show mb-xl-0" role="alert">
+        <i class="ri-error-warning-line me-3 align-middle fs-16"></i><strong>Atenção!</strong>
+        <h4 id="msgRetorno">@Html.Raw(TempData ["Excluido"].ToString())</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}

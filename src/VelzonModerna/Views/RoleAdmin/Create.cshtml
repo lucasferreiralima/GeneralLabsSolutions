@@ -1,0 +1,12 @@
+﻿@model GeneralLabSolutions.Identidade.Dtos.CriarRoleDto
+
+<h2>Criar Nova Role</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Nome da Role</label>
+        <input asp-for="Nome" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Criar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

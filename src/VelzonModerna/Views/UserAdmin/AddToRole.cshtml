@@ -1,0 +1,15 @@
+﻿@model GeneralLabSolutions.Identidade.Dtos.AdicionarUsuarioRoleDto
+
+<h2>Adicionar Usuário a uma Role</h2>
+<form asp-action="AddToRole" method="post">
+    <div class="form-group">
+        <label>ID do Usuário</label>
+        <input asp-for="UserId" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Nome da Role</label>
+        <input asp-for="RoleName" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Adicionar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

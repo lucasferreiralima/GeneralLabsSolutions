@@ -1,0 +1,51 @@
+﻿@using GeneralLabSolutions.Domain.Enums
+@using GeneralLabSolutions.Domain.DTOs.DtosConsolidados
+@model FornecedorConsolidadoDto
+
+@{
+    ViewBag.Title = "Consolidado de Fornecedor";
+    ViewBag.pTitle = "Consolidado de Fornecedor / Produtos";
+    ViewBag.pageTitle = "Consolidado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title mb-0">
+                    Consolidado do Fornecedor: <strong><span class="badge bg-primary"> @Model.Nome</span></strong>
+                </h1>
+            </div>
+            <div class="card-body">
+                <div class="alert" style="background-color: #313131;">
+                    <h4><strong>Total de Produtos:</strong> <span class="badge bg-primary">@Model.TotalDeProdutos</span></h4>
+                    <h4><strong>Valor Total Gerado:</strong> <span class="badge bg-primary">@Model.ValorTotalGerado.ToString("C")</span></h4>
+                    <h4><strong>Taxa de Devolução:</strong> <span class="badge bg-primary">@Model.TaxaDevolucao.ToString("P")</span></h4>
+                </div>
+
+                <hr />
+
+                <h2>Produtos Mais Vendidos</h2>
+                @if (Model.TotalDeProdutos > 0)
+                {
+                    <partial name="_ItensProdutoPartial" model="Model" />
+                } else
+                {
+                    <partial name="_FornecedorSemResumoPartial" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <partial name="partialcooperchip/_scripts_datatables" />
+
+    <script>
+        $('#example').DataTable({
+        "lengthMenu": [5, 8, 10, 25, 50],
+        "pageLength": 5
+        });
+    </script>
+}

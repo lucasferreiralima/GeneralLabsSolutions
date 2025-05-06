@@ -1,0 +1,45 @@
+﻿@using VelzonModerna.ViewModels
+@using GeneralLabSolutions.Domain.Enums
+@model ClienteViewModel
+
+
+
+<div class="form-group">
+    <label asp-for="Nome" class="control-label"></label>
+    <input asp-for="Nome" class="form-control" placeholder="Digite o nome do Cliente"/>
+    <span asp-validation-for="Nome" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Documento" class="control-label"></label>
+    <input asp-for="Documento" class="form-control" placeholder="Digite o Cpf ou Cnpj"/>
+    <span asp-validation-for="Documento" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label asp-for="Email" class="control-label"></label>
+    <input asp-for="Email" class="form-control" placeholder="Digite um Email válido"/>
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label class="control-label">Status do Cliente</label>
+    <select asp-for="StatusDoCliente" class="form-control" asp-items="Html.GetEnumSelectList<StatusDoCliente>()">
+            <option value="">Escolha...</option>
+    </select>
+    <span asp-validation-for="StatusDoCliente" class="text-danger"></span>
+</div>
+
+<div class="form-group">
+    <label class="control-label">Tipo de Cliente</label>
+    <select asp-for="TipoDeCliente" class="form-control" asp-items="Html.GetEnumSelectList<TipoDeCliente>()">
+        <option value="">Escolha...</option>
+    </select>
+    <span asp-validation-for="TipoDeCliente" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="control-label">Tipo de Pessoa</label>
+    <select asp-for="TipoDePessoa" class="form-control" asp-items="Html.GetEnumSelectList<TipoDePessoa>()">
+        <option value="">Escolha...</option>
+    </select>
+    <span asp-validation-for="TipoDePessoa" class="text-danger"></span>
+</div>

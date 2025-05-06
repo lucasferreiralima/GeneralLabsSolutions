@@ -1,0 +1,50 @@
+﻿<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="sm-hover" data-sidebar-image="none" data-preloader="disable">
+<head>
+
+    <partial name="_title_meta" />
+
+    @RenderSection("styles", required: false)
+
+    <partial name="_head_css" />
+
+
+
+</head>
+<body>
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <partial name="_menu" />        
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                    <partial name="_page_title" />                   
+
+                    @RenderBody()
+                </div>
+            </div>
+            <partial name="_footer" />           
+        </div>
+
+    </div>
+    <!-- END layout-wrapper -->
+
+    <partial name="_customizer" />
+    @* @Html.Partial("~/Views/Shared/_customizer.cshtml") *@
+    <partial name="_vendor_scripts" />
+    @* @Html.Partial("~/Views/Shared/_vendor_scripts.cshtml") *@
+
+    <script src="~/cooperchip/js/jquerylocal/jquery-3.7.0.min.js"></script>
+
+    <script src="~/cooperchip/js/site.js"></script>
+
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

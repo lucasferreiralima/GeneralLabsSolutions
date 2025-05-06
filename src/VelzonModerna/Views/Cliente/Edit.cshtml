@@ -1,0 +1,51 @@
+﻿@using VelzonModerna.ViewModels
+@using GeneralLabSolutions.Domain.Enums
+@model ClienteViewModel
+
+@{
+    ViewBag.Title = "Edição de Cliente";
+    ViewBag.pTitle = "Edição de Cliente";
+    ViewBag.pageTitle = "Cadastro";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1"> <strong>Cliente >> @Model.Nome.ToUpper() </strong></h4>
+            </div><!-- end card header -->
+
+            <div style="padding: 20px;">
+                <form asp-action="Edit" asp-controller="Cliente">
+                    @* <div asp-validation-summary="All" class="text-danger"></div> *@
+
+                    <vc:summary></vc:summary>
+
+                    <partial name="_edit_e_create" model="Model"/>
+                    
+                    <input type="hidden" asp-for="Id" />
+                    
+                    <hr />
+                    <div>
+                        <input type="submit" value="Atualizar" class="btn btn-outline-success" />
+                        <a asp-action="Index" class="btn btn-outline-warning">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- prismjs plugin -->
+    <script src="~/assets/libs/prismjs/prism.js"></script>
+
+    <script src="~/assets/js/app.js"></script>
+    
+}

@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <WarningsAsErrors></WarningsAsErrors>
+    <!-- Especifica quais warnings devem ser tratados como erros, mas deixe vazio se você quiser ignorar os warnings específicos -->
+    <NoWarn>CS8618;CS8602;CS8603;CS8604</NoWarn>
+    <UserSecretsId>e02b0f28-b536-4c33-bca3-22ef5364a69c</UserSecretsId>
+   
+
+
+
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Using Include="System.Globalization" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+
+    <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
+
+
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />
+    <PackageReference Include="Refit" Version="8.0.0" />
+
+
+  </ItemGroup>
+
+
+  <ItemGroup>
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\GeneralLabSolutions.Domain\GeneralLabSolutions.Domain.csproj" />
+    <ProjectReference Include="..\InfraStructure\GeneralLabSolutions.InfraStructure\GeneralLabSolutions.InfraStructure.csproj" />
+    <ProjectReference Include="..\Services\GeneralLabSolutions.Identidade\GeneralLabSolutions.Identidade.csproj" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Folder Include="Views\AgendaEventos\" />
+    <Folder Include="Views\Shared\PartialViews\" />
+    <Folder Include="wwwroot\cooperchip\css\datatables\" />
+  </ItemGroup>
+
+</Project>

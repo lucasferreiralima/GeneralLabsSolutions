@@ -1,0 +1,23 @@
+﻿@model GeneralLabSolutions.Identidade.Dtos.ManageRolesDto
+
+<h2>Gerenciar Roles - @Model.NomeCompleto</h2>
+
+<h4>Roles atuais:</h4>
+<ul>
+    @foreach (var role in Model.Roles)
+    {
+        <li>@role</li>
+    }
+</ul>
+
+<form asp-action="AddUserRole" method="post">
+    <input type="hidden" name="userId" value="@Model.UserId" />
+
+    <div class="form-group">
+        <label>Nova Role</label>
+        <input name="roleName" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Adicionar Role</button>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</form>

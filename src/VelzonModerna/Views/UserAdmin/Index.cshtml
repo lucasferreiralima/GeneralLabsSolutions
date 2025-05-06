@@ -1,0 +1,31 @@
+﻿@model List<GeneralLabSolutions.Identidade.Dtos.UserDto>
+
+<h2>Gerenciamento de Usuários</h2>
+<a asp-action="Create" asp-controller="UserAdmin" class="btn btn-primary">Criar Novo Usuário</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ativo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.NomeCompleto</td>
+                <td>@user.Email</td>
+                <td>@user.EmailConfirmado</td>
+                <td>
+                    <a asp-action="Edit" asp-controller="UserAdmin" asp-route-id="@user.UserId" class="btn btn-warning">Editar</a>
+                    <a asp-action="Details" asp-controller="UserAdmin" asp-route-id="@user.UserId" class="btn btn-info">Detalhes</a>
+                    <a asp-action="Delete" asp-controller="UserAdmin" asp-route-id="@user.UserId" class="btn btn-danger">Excluir</a>
+                    <a asp-action="ManageRoles" asp-controller="UserAdmin" asp-route-id="@user.UserId" class="btn btn-secondary">Gerenciar Roles</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

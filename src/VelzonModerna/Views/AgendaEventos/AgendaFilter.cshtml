@@ -1,0 +1,88 @@
+@using GeneralLabSolutions.Domain.Entities
+@model IEnumerable<AgendaEventos>
+
+@{ 
+	ViewData["Title"] = "Agendamento Filter";
+	ViewData["PageName"] = "agendaeventos_agendafilter";
+	ViewData["Category1"] = "Agendamento";
+	ViewData["Heading"] = "<i class='subheader-icon fal fa-table'></i> Agendamentos: <span class='fw-300'>Filtros</span> <sup class='badge badge-primary fw-500'>new feature by: SisMedico</sup>";
+	ViewData["PageDescription"] = "Busca facilitada no cabecalho da tabela, ornacao e paginacao sem qualquer complexidade de configuracao";
+}
+@section HeadBlock {
+	<link rel="stylesheet" media="screen, print" href="~/css/datagrid/datatables/datatables.bundle.css">
+}
+<div class="row">
+	<div class="col-xl-12">
+		<div id="panel-1" class="panel">
+			<div class="panel-hdr">	
+				<h2>
+					Lista <span class="fw-300"><i>com filtros</i></span> 
+				</h2>
+				<div class="panel-toolbar">
+					<button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+					<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+					<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+				</div>
+			</div>
+			<div class="panel-container show">
+				<div class="panel-content">									
+					<div class="panel-tag">
+						Lista de Agendamentos com a abordagem de filtros em todas as colunas. Esta feature e mais uma das inovacoes do SisMedico v6+.
+                        <br /><br />
+                        <p>
+                            <a asp-action="Index" asp-controller="AgendaEventos" class="btn btn-outline-success">Calendario de Agendamento</a>
+                        </p>
+					</div>
+					<table id="dt-basic-example" class="table table-bordered table-hover table-striped w-100">
+						<thead class="bg-highlight">
+							<tr>
+								<th>Titulo</th>
+								<th>Data/Hora Inicial</th>
+								<th>Data/Hora Final</th>
+								<th>Participante</th>
+                             </tr>
+                        </thead>
+						<tbody>
+                            @foreach (var item in Model)
+                            {
+							    <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Start)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.End)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Participante.Name)</td>
+                                </tr>
+                            }
+						</tbody>
+
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section ScriptsBlock {
+<script src="~/js/datagrid/datatables/datatables.bundle.js"></script>
+<script>
+	$(document).ready( function () {
+	  	// Setup - add a text input to each footer cell
+		$('#dt-basic-example thead tr').clone(true).appendTo( '#dt-basic-example thead' );
+		$('#dt-basic-example thead tr:eq(1) th').each( function (i) {
+			var title = $(this).text();
+			$(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Search '+title+'" />' );
+			$( 'input', this ).on( 'keyup change', function () {
+				if ( table.column(i).search() !== this.value ) {
+					table
+						.column(i)
+						.search( this.value )
+						.draw();
+				}
+			} );
+		});
+		var table = $('#dt-basic-example').DataTable({
+			//responsive: true,
+			orderCellsTop: true,
+			fixedHeader: true,
+		});
+	});
+</script>
+}
