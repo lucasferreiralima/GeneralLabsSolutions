@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Velzon.Controllers
 {
     public class DashBoardController : Controller
-    {
+    { 
         public IActionResult Index()
         {
             return View();
